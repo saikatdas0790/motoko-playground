@@ -1,28 +1,23 @@
 import Debug "mo:base/Debug";
-import Deque "mo:base/Deque";
 import List "mo:base/List";
 
 actor Counter {
 
-  stable var testingQueue: Deque.Deque<Nat> = Deque.empty<Nat>();
+  stable var testingList: List.List<Nat> = List.nil<Nat>();
 
-  public query func get() : async () {
-    Debug.print(debug_show testingQueue);
-    Debug.print("\n\n\n");
-    Debug.print(debug_show testingQueue.0);
-    Debug.print("\n\n\n");
-    Debug.print(debug_show testingQueue.1);
+  public query func print() : async () {
+    Debug.print(debug_show testingList);
   };
 
-  public query func getSize(): async Nat {
-    return List.size(testingQueue.0) + List.size(testingQueue.1);
+  public func addToList(n : Nat) : async () {
+    testingList := List.push(n, testingList);
   };
 
-  public func addToFront(n : Nat) : async () {
-    testingQueue := Deque.pushFront<Nat>(testingQueue, n);
+  public func removeFirstEntered() : async () {
+    testingList := List.reverse(List.drop(List.reverse(testingList), 1));
   };
-  
-  public func addToBack(n : Nat) : async () {
-    testingQueue := Deque.pushBack<Nat>(testingQueue, n);
+
+  public func paginateList(skip: Nat, take: Nat): async List.List<Nat> {
+    return List.take(List.drop(testingList, skip), take);
   };
 };
